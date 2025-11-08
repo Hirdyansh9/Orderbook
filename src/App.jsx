@@ -322,9 +322,9 @@ const Dashboard = React.memo(function Dashboard() {
       </div>
 
       {/* Recent Orders */}
-      <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
+      <div className="bg-gray-900 border border-gray-800 rounded-lg flex flex-col max-h-[800px]">
         <div
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 sm:pb-4 gap-3 cursor-pointer hover:bg-gray-800/50 transition-colors overflow-visible relative z-10"
+          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 sm:pb-4 gap-3 cursor-pointer hover:bg-gray-800/50 transition-colors relative z-10 flex-shrink-0"
           onClick={() => setRecentMinimized(!recentMinimized)}
         >
           <div className="flex items-center gap-2 sm:gap-3">
@@ -366,12 +366,12 @@ const Dashboard = React.memo(function Dashboard() {
         </div>
 
         <div
-          className={`transition-all duration-300 ease-in-out overflow-hidden ${
-            recentMinimized ? "max-h-0 opacity-0" : "max-h-[2000px] opacity-100"
+          className={`transition-all duration-300 ease-in-out flex-1 min-h-0 ${
+            recentMinimized ? "max-h-0 opacity-0" : "opacity-100"
           }`}
         >
           {showRecentCustom && (
-            <div className="px-4 sm:px-6 pb-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 border-t border-gray-800 pt-4">
+            <div className="px-4 sm:px-6 pb-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 border-t border-b border-gray-800 pt-4 flex-shrink-0">
               <input
                 type="date"
                 value={recentCustomRange.start}
@@ -416,7 +416,7 @@ const Dashboard = React.memo(function Dashboard() {
             </div>
           )}
 
-          <div className="px-4 sm:px-6 pb-4 sm:pb-6 animate-in slide-in-from-top-4 fade-in duration-500">
+          <div className="px-4 sm:px-6 pb-4 sm:pb-6 overflow-y-auto animate-in slide-in-from-top-4 fade-in duration-500">
             {dashboardStats.ordersByDay &&
             dashboardStats.ordersByDay.length > 0 ? (
               <div className="space-y-2 sm:space-y-3">
@@ -578,9 +578,9 @@ const Dashboard = React.memo(function Dashboard() {
       </div>
 
       {/* Upcoming Deliveries */}
-      <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
+      <div className="bg-gray-900 border border-gray-800 rounded-lg flex flex-col max-h-[800px]">
         <div
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 sm:pb-4 gap-3 cursor-pointer hover:bg-gray-800/50 transition-colors overflow-visible relative z-10"
+          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 sm:pb-4 gap-3 cursor-pointer hover:bg-gray-800/50 transition-colors relative z-10 flex-shrink-0"
           onClick={() => setUpcomingMinimized(!upcomingMinimized)}
         >
           <div className="flex items-center gap-2 sm:gap-3">
@@ -622,14 +622,14 @@ const Dashboard = React.memo(function Dashboard() {
         </div>
 
         <div
-          className={`transition-all duration-300 ease-in-out overflow-hidden ${
+          className={`transition-all duration-300 ease-in-out flex-1 min-h-0 ${
             upcomingMinimized
               ? "max-h-0 opacity-0"
-              : "max-h-[2000px] opacity-100"
+              : "opacity-100"
           }`}
         >
           {showUpcomingCustom && (
-            <div className="px-4 sm:px-6 pb-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 border-t border-gray-800 pt-4">
+            <div className="px-4 sm:px-6 pb-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 border-t border-b border-gray-800 pt-4 flex-shrink-0">
               <input
                 type="date"
                 value={upcomingCustomRange.start}
@@ -674,7 +674,7 @@ const Dashboard = React.memo(function Dashboard() {
             </div>
           )}
 
-          <div className="px-4 sm:px-6 pb-4 sm:pb-6 animate-in slide-in-from-top-4 fade-in duration-500">
+          <div className="px-4 sm:px-6 pb-4 sm:pb-6 overflow-y-auto animate-in slide-in-from-top-4 fade-in duration-500">
             {dashboardStats.upcomingDeliveries &&
             dashboardStats.upcomingDeliveries.length > 0 ? (
               <div className="space-y-2 sm:space-y-3">
