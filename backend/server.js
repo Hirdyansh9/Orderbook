@@ -149,15 +149,28 @@ app.use(errorHandler);
 
 // Start server
 const PORT = process.env.PORT || 5000;
-const HOST = "127.0.0.1";
-app.listen(PORT, HOST, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📍 API URL: http://localhost:${PORT}`);
-  console.log(`📍 Bound to: ${HOST}:${PORT}`);
 
-  // Start notification scheduler
-  notificationService.startScheduler();
-});
+// Only bind to localhost in development - Vercel handles binding
+if (process.env.NODE_ENV !== 'production') {
+  const HOST = "127.0.0.1";
+  app.listen(PORT, HOST, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📍 API URL: http://localhost:${PORT}`);
+    console.log(`📍 Bound to: ${HOST}:${PORT}`);
+
+    // Start notification scheduler
+    notificationService.startScheduler();
+  });
+} else {
+  // In production (Vercel), don't specify host - let Vercel handle it
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📍 Environment: ${process.env.NODE_ENV}`);
+
+    // Start notification scheduler
+    notificationService.startScheduler();
+  });
+}
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err) => {
