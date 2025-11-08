@@ -28,6 +28,11 @@ export default function NotificationsPage() {
   const [filter, setFilter] = useState("all"); // all, unread, read
   const [showManualModal, setShowManualModal] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState(null);
+  const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+    id: null,
+    title: "",
+  });
 
   useEffect(() => {
     loadNotificationsList();
@@ -75,14 +80,11 @@ export default function NotificationsPage() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this notification?")) {
-      return;
-    }
-
+  const handleDelete = async () => {
     try {
-      await api.deleteNotification(id);
-      setNotifications((prev) => prev.filter((n) => n._id !== id));
+      await api.deleteNotification(deleteModal.id);
+      setNotifications((prev) => prev.filter((n) => n._id !== deleteModal.id));
+      setDeleteModal({ isOpen: false, id: null, title: "" });
       loadNotifications?.(); // Update context
     } catch (error) {
       console.error("Failed to delete notification:", error);
@@ -344,7 +346,13 @@ export default function NotificationsPage() {
                             </button>
                           )}
                           <button
-                            onClick={() => handleDelete(notification._id)}
+                            onClick={() =>
+                              setDeleteModal({
+                                isOpen: true,
+                                id: notification._id,
+                                title: notification.title,
+                              })
+                            }
                             className="p-1 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:text-red-400 transition-colors duration-200"
                             title="Delete"
                           >
@@ -462,7 +470,11 @@ export default function NotificationsPage() {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleDelete(selectedNotification._id);
+                  setDeleteModal({
+                    isOpen: true,
+                    id: selectedNotification._id,
+                    title: selectedNotification.title,
+                  });
                   setSelectedNotification(null);
                 }}
                 className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 rounded-lg hover:bg-red-900/50 border border-red-300 dark:border-red-800 transition-all duration-200"
@@ -484,6 +496,51 @@ export default function NotificationsPage() {
           onClose={() => setShowManualModal(false)}
           onSuccess={handleManualNotificationSuccess}
         />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModal.isOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={() =>
+            setDeleteModal({ isOpen: false, id: null, title: "" })
+          }
+        >
+          <div
+            className="bg-gray-900 border border-gray-800 rounded-lg p-6 w-full max-w-lg animate-in zoom-in-95 slide-in-from-bottom-4 duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-xl font-semibold text-gray-100 mb-4">
+              Delete Notification
+            </h2>
+            <p className="text-gray-300 mb-6">
+              Are you sure you want to delete{" "}
+              <strong className="text-gray-100">"{deleteModal.title}"</strong>?
+              This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() =>
+                  setDeleteModal({ isOpen: false, id: null, title: "" })
+                }
+                className="px-4 py-2 text-sm font-medium bg-gray-800 text-gray-100 hover:bg-gray-700 rounded-lg border border-gray-700 transition-all duration-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={loading}
+                className="px-4 py-2 text-sm font-medium bg-red-900/50 text-red-100 hover:bg-red-900 rounded-lg border border-red-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center"
+              >
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  "Delete"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
