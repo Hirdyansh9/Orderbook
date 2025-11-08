@@ -4,6 +4,7 @@ import React, {
   useCallback,
   createContext,
   useContext,
+  useMemo,
 } from "react";
 import api from "../services/api";
 
@@ -34,18 +35,15 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     if (!user) return;
 
-    const pollNotifications = async () => {
+    // Don't poll immediately - let initial auth load handle first fetch
+    const intervalId = setInterval(async () => {
       try {
         const notificationsData = await api.getNotifications();
         setNotifications(notificationsData);
       } catch (error) {
         console.error("Error polling notifications:", error);
       }
-    };
-
-    // Poll immediately on mount, then every 10 seconds
-    pollNotifications();
-    const intervalId = setInterval(pollNotifications, 10000);
+    }, 10000);
 
     return () => clearInterval(intervalId);
   }, [user]);
@@ -356,45 +354,65 @@ export const AppProvider = ({ children }) => {
     []
   );
 
+  const loadNotifications = useCallback(async () => {
+    try {
+      const notificationsData = await api.getNotifications();
+      setNotifications(notificationsData);
+    } catch (error) {
+      console.error("Error loading notifications:", error);
+    }
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({
+      user,
+      login,
+      logout,
+      sidebarOpen,
+      toggleSidebar,
+      customers,
+      employees,
+      notifications,
+      policies,
+      dashboardStats,
+      createOrder,
+      updateOrder,
+      deleteOrder,
+      createEmployee,
+      updateEmployee,
+      deleteEmployee,
+      resetEmployeePassword,
+      addNotification,
+      markNotificationAsRead,
+      dismissNotification,
+      updatePolicies,
+      refreshDashboard,
+      loading,
+      error,
+      isAuthInitialized,
+      refreshData: loadAllData,
+      loadNotifications,
+    }),
+    [
+      user,
+      sidebarOpen,
+      customers,
+      employees,
+      notifications,
+      policies,
+      dashboardStats,
+      loading,
+      error,
+      isAuthInitialized,
+      toggleSidebar,
+      refreshDashboard,
+      loadAllData,
+      loadNotifications,
+    ]
+  );
+
   return (
-    <AppContext.Provider
-      value={{
-        user,
-        login,
-        logout,
-        sidebarOpen,
-        toggleSidebar,
-        customers,
-        employees,
-        notifications,
-        policies,
-        dashboardStats,
-        createOrder,
-        updateOrder,
-        deleteOrder,
-        createEmployee,
-        updateEmployee,
-        deleteEmployee,
-        resetEmployeePassword,
-        addNotification,
-        markNotificationAsRead,
-        dismissNotification,
-        updatePolicies,
-        refreshDashboard,
-        loading,
-        error,
-        isAuthInitialized,
-        refreshData: loadAllData,
-        loadNotifications: async () => {
-          try {
-            const notificationsData = await api.getNotifications();
-            setNotifications(notificationsData);
-          } catch (error) {
-            console.error("Error loading notifications:", error);
-          }
-        },
-      }}
-    >
+    <AppContext.Provider value={contextValue}>
       {children}
     </AppContext.Provider>
   );

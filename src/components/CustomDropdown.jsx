@@ -11,14 +11,14 @@ import { ChevronDown } from "lucide-react";
  * @param {string} props.className - Additional classes for the container
  * @param {string} props.label - Optional label for the dropdown
  */
-const CustomDropdown = ({
+const CustomDropdown = React.memo(function CustomDropdown({
   value,
   onChange,
   options = [],
   className = "",
   label = null,
   placeholder = "Select...",
-}) => {
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -111,6 +111,6 @@ const CustomDropdown = ({
       </div>
     </div>
   );
-};
+});
 
 export default CustomDropdown;

@@ -502,9 +502,7 @@ export default function NotificationsPage() {
       {deleteModal.isOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
-          onClick={() =>
-            setDeleteModal({ isOpen: false, id: null, title: "" })
-          }
+          onClick={() => setDeleteModal({ isOpen: false, id: null, title: "" })}
         >
           <div
             className="bg-gray-900 border border-gray-800 rounded-lg p-6 w-full max-w-lg animate-in zoom-in-95 slide-in-from-bottom-4 duration-300"

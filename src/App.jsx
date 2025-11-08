@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "./index.css";
 import { AppProvider, useApp } from "./context/AppContext.jsx";
 import LoginScreen from "./components/LoginScreen";
@@ -244,7 +244,7 @@ function Modal({ isOpen, onClose, title, children }) {
 }
 
 // --- Dashboard Component ---
-function Dashboard() {
+const Dashboard = React.memo(function Dashboard() {
   const { dashboardStats, refreshDashboard } = useApp();
   const [recentDays, setRecentDays] = useState(1);
   const [upcomingDays, setUpcomingDays] = useState(1);
@@ -265,14 +265,17 @@ function Dashboard() {
     refreshDashboard(recentDays, upcomingDays);
   }, [refreshDashboard, recentDays, upcomingDays]);
 
-  const timeWindowOptions = [
-    { value: 1, label: "1 Day" },
-    { value: 3, label: "3 Days" },
-    { value: 7, label: "7 Days" },
-    { value: 14, label: "14 Days" },
-    { value: 30, label: "30 Days" },
-    { value: "custom", label: "Custom Range" },
-  ];
+  const timeWindowOptions = useMemo(
+    () => [
+      { value: 1, label: "1 Day" },
+      { value: 3, label: "3 Days" },
+      { value: 7, label: "7 Days" },
+      { value: 14, label: "14 Days" },
+      { value: 30, label: "30 Days" },
+      { value: "custom", label: "Custom Range" },
+    ],
+    []
+  );
 
   if (!dashboardStats) {
     return (
@@ -844,10 +847,10 @@ function Dashboard() {
       </div>
     </div>
   );
-}
+});
 
 // --- Notifications Panel ---
-function NotificationsPanel() {
+const NotificationsPanel = React.memo(function NotificationsPanel() {
   const { notifications, markNotificationAsRead, dismissNotification } =
     useApp();
   const [isOpen, setIsOpen] = useState(false);
@@ -927,7 +930,7 @@ function NotificationsPanel() {
       )}
     </div>
   );
-}
+});
 
 // --- Main Layout ---
 function MainLayout() {

@@ -64,7 +64,10 @@ router.post("/", authenticateToken, requireOwner, async (req, res, next) => {
         });
       }
     } catch (notifError) {
-      console.error("Failed to create employee creation notification:", notifError);
+      console.error(
+        "Failed to create employee creation notification:",
+        notifError
+      );
     }
 
     res.status(201).json(user);
@@ -141,7 +144,10 @@ router.delete(
           });
         }
       } catch (notifError) {
-        console.error("Failed to create employee deletion notification:", notifError);
+        console.error(
+          "Failed to create employee deletion notification:",
+          notifError
+        );
       }
 
       await user.deleteOne();

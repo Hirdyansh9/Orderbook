@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.PROD 
+const API_URL = import.meta.env.PROD
   ? "/api" // In production, use relative path (same domain)
   : "http://localhost:5001/api"; // In development, use localhost
 
