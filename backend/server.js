@@ -151,7 +151,7 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 
 // Only bind to localhost in development - Vercel handles binding
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   const HOST = "127.0.0.1";
   app.listen(PORT, HOST, () => {
     console.log(`🚀 Server running on port ${PORT}`);
