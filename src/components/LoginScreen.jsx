@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Lock, Loader2, Eye, EyeOff } from "lucide-react";
+import { Lock, Loader2, Eye, EyeOff, AlertCircle, UserX, ShieldAlert } from "lucide-react";
 
 export default function LoginScreen({ onLogin }) {
   const [username, setUsername] = useState("");
@@ -16,10 +16,23 @@ export default function LoginScreen({ onLogin }) {
     try {
       await onLogin(username, password);
     } catch (err) {
-      setError(err.message || "Login failed");
+      // Set user-friendly error message
+      setError(err.message || "Unable to sign in. Please try again.");
     } finally {
       setLoading(false);
     }
+  };
+
+  // Determine error icon and styling based on error message
+  const getErrorIcon = () => {
+    if (!error) return null;
+    if (error.includes("not found") || error.includes("User not found")) {
+      return <UserX className="w-5 h-5 flex-shrink-0" />;
+    }
+    if (error.includes("deactivated") || error.includes("account")) {
+      return <ShieldAlert className="w-5 h-5 flex-shrink-0" />;
+    }
+    return <AlertCircle className="w-5 h-5 flex-shrink-0" />;
   };
 
   return (
@@ -36,8 +49,27 @@ export default function LoginScreen({ onLogin }) {
         <p className="text-center text-gray-400 mb-8">Sign in to continue</p>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-950/50 border border-red-900/50 text-red-300 rounded-lg text-sm">
-            {error}
+          <div className="mb-6 p-4 bg-red-950/50 border border-red-900/50 rounded-lg animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="flex items-start gap-3">
+              <div className="text-red-400 mt-0.5">
+                {getErrorIcon()}
+              </div>
+              <div className="flex-1">
+                <p className="text-red-300 text-sm font-medium">
+                  {error}
+                </p>
+                {error.includes("not found") && (
+                  <p className="text-red-400/80 text-xs mt-1">
+                    Double-check your username and try again.
+                  </p>
+                )}
+                {error.includes("password") && (
+                  <p className="text-red-400/80 text-xs mt-1">
+                    Make sure Caps Lock is off and try again.
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         )}
 

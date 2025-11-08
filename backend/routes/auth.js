@@ -52,8 +52,12 @@ router.post("/login", async (req, res) => {
         : "No user found"
     );
 
-    if (!user || !user.isActive) {
-      return res.status(401).json({ error: "Invalid credentials" });
+    if (!user) {
+      return res.status(401).json({ error: "User not found. Please check your username." });
+    }
+
+    if (!user.isActive) {
+      return res.status(401).json({ error: "Your account has been deactivated. Please contact the administrator." });
     }
 
     // Check password
@@ -61,7 +65,7 @@ router.post("/login", async (req, res) => {
     console.log("Password match:", isMatch);
 
     if (!isMatch) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ error: "Incorrect password. Please try again." });
     }
 
     // Update last login
