@@ -30,6 +30,26 @@ export const AppProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [isAuthInitialized, setIsAuthInitialized] = useState(false);
 
+  // Poll for new notifications every 10 seconds when user is logged in
+  useEffect(() => {
+    if (!user) return;
+
+    const pollNotifications = async () => {
+      try {
+        const notificationsData = await api.getNotifications();
+        setNotifications(notificationsData);
+      } catch (error) {
+        console.error("Error polling notifications:", error);
+      }
+    };
+
+    // Poll immediately on mount, then every 10 seconds
+    pollNotifications();
+    const intervalId = setInterval(pollNotifications, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [user]);
+
   // Persist sidebar state
   useEffect(() => {
     try {
