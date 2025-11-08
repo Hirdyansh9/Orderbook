@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./index.css";
 import { AppProvider, useApp } from "./context/AppContext.jsx";
 import LoginScreen from "./components/LoginScreen";
-import { Orders } from "./components/Orders";
+import Orders from "./components/OrdersPage";
 import EmployeeManagement from "./components/EmployeeManagement";
 import NotificationsPage from "./components/pages/NotificationsPage";
 import NotificationSettings from "./components/NotificationSettings";
