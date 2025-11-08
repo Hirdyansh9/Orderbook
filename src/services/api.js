@@ -29,10 +29,11 @@ class ApiService {
   async handleResponse(response) {
     if (!response.ok) {
       const error = await response.json().catch(() => ({
-        message: "An error occurred",
+        error: "An error occurred",
       }));
+      // Backend sends error in 'error' field, not 'message'
       throw new Error(
-        error.message || `HTTP error! status: ${response.status}`
+        error.error || error.message || `HTTP error! status: ${response.status}`
       );
     }
     return response.json();
