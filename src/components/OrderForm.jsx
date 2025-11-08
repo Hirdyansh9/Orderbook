@@ -7,6 +7,7 @@ import {
   Calendar,
   ChevronDown,
 } from "lucide-react";
+import CustomDropdown from "./CustomDropdown";
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
@@ -481,11 +482,12 @@ export default function ImprovedOrderForm({
             Additional Information
           </h3>
 
-          <Select
-            name="deliveryStatus"
+          <CustomDropdown
             label="Delivery Status"
             value={formData.deliveryStatus}
-            onChange={handleChange}
+            onChange={(newValue) =>
+              setFormData((prev) => ({ ...prev, deliveryStatus: newValue }))
+            }
             options={[
               { value: "Pending", label: "Pending" },
               { value: "Delivered", label: "Delivered" },
