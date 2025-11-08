@@ -71,7 +71,7 @@ git add .
 git commit -m "Ready for deployment"
 
 # Create a new repository on GitHub, then:
-git remote add origin https://github.com/Hirdyansh9/Orderbook.git
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
 git branch -M main
 git push -u origin main
 ```
@@ -103,14 +103,21 @@ VITE_API_URL=https://your-project-name.vercel.app/api
 NODE_ENV=production
 JWT_SECRET=<your-128-character-secret>
 JWT_EXPIRY=7d
-mongodb+srv://hirdyanshmahajan_db_user:<b3WJ3UoQTbUGP8VQ>@cluster0.jhwsaek.mongodb.net/?appName=Cluster0
-ALLOWED_ORIGINS=https://your-project-name.vercel.app
+MONGODB_URI=mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net/orderbook?retryWrites=true&w=majority
+ALLOWED_ORIGINS=https://your-project-name.vercel.app,https://your-project-name-git-main.vercel.app
 BCRYPT_ROUNDS=12
 RATE_LIMIT_WINDOW_MS=900000
 RATE_LIMIT_MAX_REQUESTS=100
 AUTH_RATE_LIMIT_MAX=5
 PORT=5000
 ```
+
+**⚠️ IMPORTANT NOTES:**
+
+- Replace `your-project-name` with your actual Vercel project name
+- Include both production URL and git branch URLs in ALLOWED_ORIGINS
+- Don't include trailing slashes in URLs
+- Separate multiple origins with commas (no spaces)
 
 **To generate a strong JWT_SECRET:**
 
@@ -276,9 +283,24 @@ Should return:
 
 **Solution**:
 
-- Verify `ALLOWED_ORIGINS` includes your Vercel URL
-- Don't include trailing slash in origins
-- Redeploy after changing environment variables
+1. **Find your Vercel URL**: Check your deployment logs or Vercel dashboard
+2. **Update ALLOWED_ORIGINS** in Vercel environment variables:
+   ```
+   ALLOWED_ORIGINS=https://your-actual-url.vercel.app,https://your-actual-url-git-main.vercel.app
+   ```
+3. **Important**:
+   - Don't include trailing slashes
+   - Include both production and preview deployment URLs
+   - Separate multiple URLs with commas (no spaces)
+   - Use exact URLs (case-sensitive)
+4. **Redeploy** after changing environment variables
+5. **Check logs** for "CORS blocked origin" messages to see what origin is being rejected
+
+**Example of correct ALLOWED_ORIGINS:**
+
+```
+ALLOWED_ORIGINS=https://orderbook-app.vercel.app,https://orderbook-app-git-main.vercel.app
+```
 
 ### Rate Limiting Issues
 
