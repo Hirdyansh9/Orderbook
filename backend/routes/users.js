@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
+import Notification from "../models/Notification.js";
 import {
   auth as authenticateToken,
   ownerOnly as requireOwner,
@@ -49,6 +50,22 @@ router.post("/", authenticateToken, requireOwner, async (req, res, next) => {
     });
 
     await user.save();
+
+    // Create notification for owner about new employee
+    try {
+      const owner = await User.findOne({ role: "owner" });
+      if (owner) {
+        await Notification.create({
+          userId: owner._id,
+          title: "New Employee Created",
+          message: `Employee ${name} (${username}) has been added to the system by ${req.user.name}.`,
+          type: "success",
+          read: false,
+        });
+      }
+    } catch (notifError) {
+      console.error("Failed to create employee creation notification:", notifError);
+    }
 
     res.status(201).json(user);
   } catch (error) {
@@ -109,6 +126,22 @@ router.delete(
       // Don't allow deleting the owner
       if (user.role === "owner") {
         return res.status(403).json({ message: "Cannot delete owner account" });
+      }
+
+      // Create notification for owner about employee deletion
+      try {
+        const owner = await User.findOne({ role: "owner" });
+        if (owner) {
+          await Notification.create({
+            userId: owner._id,
+            title: "Employee Deleted",
+            message: `Employee ${user.name} (${user.username}) has been removed from the system by ${req.user.name}.`,
+            type: "warning",
+            read: false,
+          });
+        }
+      } catch (notifError) {
+        console.error("Failed to create employee deletion notification:", notifError);
       }
 
       await user.deleteOne();
