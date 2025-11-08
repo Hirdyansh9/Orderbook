@@ -981,31 +981,49 @@ function MainLayout() {
   );
 
   return (
-    <div className="flex h-screen bg-gray-950 relative">
+    <div className="flex h-screen bg-gray-950 relative overflow-hidden">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+
       {/* Sidebar */}
       <div
         className={`${
-          sidebarOpen ? "w-72" : "w-0"
-        } bg-gray-900 border-r border-gray-800 transition-all duration-300 ease-in-out overflow-hidden flex-shrink-0`}
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 fixed lg:relative inset-y-0 left-0 z-50 w-72 bg-gray-900 border-r border-gray-800 transition-transform duration-300 ease-in-out flex-shrink-0`}
       >
-        <div
-          className={`w-72 h-full flex flex-col ${
-            sidebarOpen ? "opacity-100" : "opacity-0"
-          } transition-opacity duration-300`}
-        >
-          <div className="px-6 py-4 border-b border-gray-800 h-[73px] flex items-center">
+        <div className="w-72 h-full flex flex-col">
+          <div className="px-6 py-4 border-b border-gray-800 h-[73px] flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Logo className="w-8 h-8 text-gray-100" />
               <h1 className="text-xl font-semibold text-gray-100 tracking-wide">
                 Orderbook
               </h1>
             </div>
+            {/* Close button for mobile */}
+            <button
+              onClick={toggleSidebar}
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-800 transition-colors"
+              title="Close sidebar"
+            >
+              <X className="w-5 h-5 text-gray-400" />
+            </button>
           </div>
           <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
             {filteredMenuItems.map((item, index) => (
               <button
                 key={item.id}
-                onClick={() => setCurrentView(item.id)}
+                onClick={() => {
+                  setCurrentView(item.id);
+                  // Close sidebar on mobile when item is clicked
+                  if (window.innerWidth < 1024) {
+                    toggleSidebar();
+                  }
+                }}
                 style={{
                   animationDelay: `${index * 50}ms`,
                 }}
@@ -1054,7 +1072,7 @@ function MainLayout() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <header className="bg-gray-900 border-b border-gray-800 h-[73px]">
-          <div className="flex items-center justify-between px-6 py-4 h-full">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-4 h-full">
             <div className="flex items-center gap-4">
               <button
                 onClick={toggleSidebar}
@@ -1063,27 +1081,27 @@ function MainLayout() {
               >
                 <Menu className="w-5 h-5 text-gray-400" />
               </button>
-              <h2 className="text-lg font-medium text-gray-100 capitalize">
+              <h2 className="text-base sm:text-lg font-medium text-gray-100 capitalize truncate">
                 {currentView.replace("-", " ")}
               </h2>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <NotificationsPanel />
               <button
                 onClick={logout}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-gray-100 transition-all duration-200 shadow-sm hover:shadow group"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-gray-100 transition-all duration-200 shadow-sm hover:shadow group"
                 title="Logout"
               >
                 <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
-                <span className="text-sm font-medium">Logout</span>
+                <span className="text-sm font-medium hidden sm:inline">Logout</span>
               </button>
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto p-6 bg-gray-950">
+        <main className="flex-1 overflow-auto p-4 sm:p-6 bg-gray-950">
           {currentView === "dashboard" && <Dashboard />}
           {currentView === "orders" && <Orders />}
           {currentView === "notifications" && <NotificationsPage />}
