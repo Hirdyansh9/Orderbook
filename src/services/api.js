@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:5001/api";
+const API_URL = import.meta.env.PROD 
+  ? "/api" // In production, use relative path (same domain)
+  : "http://localhost:5001/api"; // In development, use localhost
 
 class ApiService {
   constructor() {
