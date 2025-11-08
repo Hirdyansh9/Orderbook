@@ -293,8 +293,12 @@ const Dashboard = React.memo(function Dashboard() {
         {icon}
       </div>
       <div>
-        <p className="text-xs sm:text-sm font-medium text-gray-400 mb-1">{title}</p>
-        <p className="text-2xl sm:text-3xl font-bold text-gray-100 tabular-nums">{value}</p>
+        <p className="text-xs sm:text-sm font-medium text-gray-400 mb-1">
+          {title}
+        </p>
+        <p className="text-2xl sm:text-3xl font-bold text-gray-100 tabular-nums">
+          {value}
+        </p>
       </div>
     </div>
   );
@@ -320,7 +324,7 @@ const Dashboard = React.memo(function Dashboard() {
       {/* Recent Orders */}
       <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
         <div
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 sm:pb-4 gap-3 cursor-pointer hover:bg-gray-800/50 transition-colors"
+          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 sm:pb-4 gap-3 cursor-pointer hover:bg-gray-800/50 transition-colors overflow-visible relative z-10"
           onClick={() => setRecentMinimized(!recentMinimized)}
         >
           <div className="flex items-center gap-2 sm:gap-3">
@@ -331,15 +335,19 @@ const Dashboard = React.memo(function Dashboard() {
                 <ChevronUp className="w-5 h-5 text-gray-400" />
               )}
             </div>
-            <h3 className="text-base sm:text-lg font-medium text-gray-100">Recent Orders</h3>
+            <h3 className="text-base sm:text-lg font-medium text-gray-100">
+              Recent Orders
+            </h3>
           </div>
           {!recentMinimized && (
             <div
-              className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto"
+              className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto relative"
               onClick={(e) => e.stopPropagation()}
             >
-              <label className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">Show last:</label>
-              <div className="w-full sm:w-40">
+              <label className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">
+                Show last:
+              </label>
+              <div className="w-full sm:w-40 relative z-20">
                 <CustomDropdown
                   value={recentDays}
                   onChange={(val) => {
@@ -375,7 +383,9 @@ const Dashboard = React.memo(function Dashboard() {
                 }
                 className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert"
               />
-              <span className="text-gray-400 text-sm text-center sm:text-left">to</span>
+              <span className="text-gray-400 text-sm text-center sm:text-left">
+                to
+              </span>
               <input
                 type="date"
                 value={recentCustomRange.end}
@@ -570,7 +580,7 @@ const Dashboard = React.memo(function Dashboard() {
       {/* Upcoming Deliveries */}
       <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
         <div
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 sm:pb-4 gap-3 cursor-pointer hover:bg-gray-800/50 transition-colors"
+          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 sm:pb-4 gap-3 cursor-pointer hover:bg-gray-800/50 transition-colors overflow-visible relative z-10"
           onClick={() => setUpcomingMinimized(!upcomingMinimized)}
         >
           <div className="flex items-center gap-2 sm:gap-3">
@@ -587,11 +597,13 @@ const Dashboard = React.memo(function Dashboard() {
           </div>
           {!upcomingMinimized && (
             <div
-              className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto"
+              className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto relative"
               onClick={(e) => e.stopPropagation()}
             >
-              <label className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">Show next:</label>
-              <div className="w-full sm:w-40">
+              <label className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">
+                Show next:
+              </label>
+              <div className="w-full sm:w-40 relative z-20">
                 <CustomDropdown
                   value={upcomingDays}
                   onChange={(val) => {
@@ -629,7 +641,9 @@ const Dashboard = React.memo(function Dashboard() {
                 }
                 className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert"
               />
-              <span className="text-gray-400 text-sm text-center sm:text-left">to</span>
+              <span className="text-gray-400 text-sm text-center sm:text-left">
+                to
+              </span>
               <input
                 type="date"
                 value={upcomingCustomRange.end}
