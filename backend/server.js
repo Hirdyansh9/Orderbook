@@ -1,8 +1,8 @@
+import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import { errorHandler } from "./middleware/errorHandler.js";
-import { generalRateLimit } from "./middleware/rateLimiter.js";
 import { sanitizeInput } from "./middleware/sanitize.js";
 import {
   enforceHTTPS,
@@ -98,14 +98,12 @@ app.use(
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
 
-      // In development, allow all Vercel preview deployments
-      if (
-        process.env.NODE_ENV !== "production" &&
-        origin?.includes("vercel.app")
-      ) {
+      // Allow all Vercel deployment URLs (production, preview, git branches)
+      if (origin?.includes("vercel.app")) {
         return callback(null, true);
       }
 
+      // Allow localhost origins
       if (allowedOrigins.indexOf(origin) === -1) {
         const msg =
           "The CORS policy for this site does not allow access from the specified origin.";
@@ -139,10 +137,7 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// Apply general rate limiting to all API routes
-app.use("/api", generalRateLimit);
-
-// API Routes (auth routes have their own stricter rate limiting)
+// API Routes (no rate limiting)
 app.use("/api/auth", authRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/notifications", notificationRoutes);

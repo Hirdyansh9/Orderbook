@@ -186,13 +186,13 @@ export default function EmployeeManagement({
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6 animate-in fade-in slide-in-from-top-2 duration-300">
+      <div className="flex justify-between items-center mb-6 animate-in fade-in slide-in-from-top-2 duration-300">
         <div className="text-sm text-gray-400">
           {employees.length} {employees.length === 1 ? "employee" : "employees"}
         </div>
         <Button
           onClick={() => setModal({ isOpen: true, mode: "create", data: null })}
-          className="hover:scale-105 w-full sm:w-auto"
+          className="hover:scale-105"
         >
           <Plus className="w-5 h-5 mr-2" />
           Add Employee
@@ -201,8 +201,7 @@ export default function EmployeeManagement({
 
       {/* Employees Table */}
       <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-        {/* Desktop Table View */}
-        <div className="hidden md:block overflow-x-auto">
+        <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-800 border-b border-gray-700">
               <tr>
@@ -317,103 +316,11 @@ export default function EmployeeManagement({
             </tbody>
           </table>
         </div>
-
-        {/* Mobile Card View */}
-        <div className="md:hidden divide-y divide-gray-800">
-          {employees.length === 0 ? (
-            <div className="text-center py-8 text-gray-400">
-              No employees found
-            </div>
-          ) : (
-            employees.map((employee, index) => (
-              <div
-                key={employee._id}
-                style={{
-                  animationDelay: `${index * 50}ms`,
-                }}
-                className="p-4 hover:bg-gray-800/30 transition-all duration-150 animate-in fade-in slide-in-from-bottom-2 duration-300"
-              >
-                {/* Card Header */}
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-semibold text-gray-100 truncate">
-                      {employee.name}
-                    </h3>
-                    <p className="text-sm text-gray-400 mt-1">
-                      <span className="text-gray-500">@</span>
-                      {employee.username}
-                    </p>
-                  </div>
-                  <span
-                    className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ml-2 flex-shrink-0 ${
-                      employee.isActive
-                        ? "bg-green-900/30 text-green-400 border border-green-800"
-                        : "bg-gray-800 text-gray-400 border border-gray-700"
-                    }`}
-                  >
-                    {employee.isActive ? "Active" : "Inactive"}
-                  </span>
-                </div>
-
-                {/* Role Badge */}
-                <div className="mb-3">
-                  <span
-                    className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
-                      employee.role === "owner"
-                        ? "bg-purple-900/30 text-purple-400 border border-purple-800"
-                        : "bg-blue-900/30 text-blue-400 border border-blue-800"
-                    }`}
-                  >
-                    {employee.role}
-                  </span>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-2">
-                  <button
-                    onClick={() =>
-                      setModal({
-                        isOpen: true,
-                        mode: "edit",
-                        data: employee,
-                      })
-                    }
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-100 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-all"
-                  >
-                    <Edit className="w-4 h-4" />
-                    Edit
-                  </button>
-                  <button
-                    onClick={() =>
-                      setPasswordModal({
-                        isOpen: true,
-                        id: employee._id,
-                        name: employee.name,
-                      })
-                    }
-                    className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-blue-400 bg-blue-900/20 border border-blue-800 rounded-lg hover:bg-blue-900/30 transition-all"
-                  >
-                    <Key className="w-4 h-4" />
-                  </button>
-                  {employee.role !== "owner" && (
-                    <button
-                      onClick={() =>
-                        setDeleteModal({
-                          isOpen: true,
-                          id: employee._id,
-                          name: employee.name,
-                        })
-                      }
-                      className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-red-400 bg-red-900/20 border border-red-800 rounded-lg hover:bg-red-900/30 transition-all"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+        {employees.length === 0 && (
+          <div className="text-center py-8 text-gray-400">
+            No employees found
+          </div>
+        )}
       </div>
 
       {/* Employee Form Modal */}

@@ -239,25 +239,20 @@ export default function NotificationSettings() {
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
-        <div>
-          <p className="text-sm text-gray-400">
-            Manage automated notification triggers for orders
-          </p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+      <div className="flex justify-end items-center mb-6 animate-in fade-in slide-in-from-top-2 duration-300">
+        <div className="flex gap-3">
           {user?.role === "owner" && (
             <>
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-gray-100 rounded-lg hover:bg-white transition-all duration-200 hover:scale-105 w-full sm:w-auto"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-gray-100 rounded-lg hover:bg-white transition-all duration-200 hover:scale-105"
               >
                 <Plus className="w-4 h-4" />
                 Create Trigger
               </button>
               <button
                 onClick={handleTestTriggers}
-                className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-100 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:scale-105 w-full sm:w-auto"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-100 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:scale-105"
               >
                 <TestTube className="w-4 h-4" />
                 Test Now
@@ -267,7 +262,7 @@ export default function NotificationSettings() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-100 bg-blue-900/50 border border-blue-800 rounded-lg hover:bg-blue-900/70 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 w-full sm:w-auto"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-100 bg-blue-900/50 border border-blue-800 rounded-lg hover:bg-blue-900/70 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
           >
             <Save className="w-4 h-4" />
             {saving ? "Saving..." : "Save Changes"}
@@ -296,8 +291,8 @@ export default function NotificationSettings() {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <div className="bg-gray-900 rounded-lg p-4 sm:p-6 border border-gray-800 hover:border-gray-700 transition-all duration-200 hover:scale-105">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-3 duration-400">
+        <div className="bg-gray-900 rounded-lg p-6 border border-gray-800 hover:border-gray-700 transition-all duration-200 hover:scale-105">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-400 mb-1">Total Triggers</p>
@@ -347,7 +342,10 @@ export default function NotificationSettings() {
           return (
             <div
               key={trigger.id}
-              className={`bg-gray-900 rounded-lg border transition-all duration-200 hover:border-gray-700 hover:shadow-lg ${
+              style={{
+                animationDelay: `${index * 75}ms`,
+              }}
+              className={`bg-gray-900 rounded-lg border transition-all duration-200 hover:border-gray-700 hover:shadow-lg animate-in fade-in slide-in-from-bottom-3 duration-400 ${
                 trigger.enabled
                   ? "border-gray-800"
                   : "border-gray-800 opacity-60"

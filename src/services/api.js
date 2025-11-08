@@ -1,93 +1,38 @@
-// Use environment variable for API URL with fallback
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001/api";
+const API_URL = "http://localhost:5001/api";
 
 class ApiService {
   constructor() {
     this.token = localStorage.getItem("token");
-    this.tokenExpiry = localStorage.getItem("tokenExpiry");
-    this.checkTokenExpiry();
   }
 
-  /**
-   * Check if token is expired and clear if necessary
-   */
-  checkTokenExpiry() {
-    if (this.tokenExpiry && Date.now() > parseInt(this.tokenExpiry)) {
-      console.warn("Token expired, clearing...");
-      this.clearAuth();
-    }
-  }
-
-  /**
-   * Set authentication token with optional expiry
-   */
-  setToken(token, expiresIn = 7 * 24 * 60 * 60 * 1000) {
-    // Default 7 days
+  setToken(token) {
     this.token = token;
     if (token) {
       localStorage.setItem("token", token);
-      // Store expiry timestamp
-      const expiry = Date.now() + expiresIn;
-      localStorage.setItem("tokenExpiry", expiry.toString());
-      this.tokenExpiry = expiry.toString();
     } else {
-      this.clearAuth();
+      localStorage.removeItem("token");
     }
   }
 
-  /**
-   * Clear all authentication data
-   */
-  clearAuth() {
-    this.token = null;
-    this.tokenExpiry = null;
-    localStorage.removeItem("token");
-    localStorage.removeItem("tokenExpiry");
-  }
-
-  /**
-   * Get headers with auth token
-   */
   getHeaders() {
     const headers = {
       "Content-Type": "application/json",
     };
-
-    // Check token expiry before adding to headers
-    this.checkTokenExpiry();
-
     if (this.token) {
       headers.Authorization = `Bearer ${this.token}`;
     }
     return headers;
   }
 
-  /**
-   * Handle API response with error handling
-   */
   async handleResponse(response) {
-    // Handle 401 Unauthorized (expired/invalid token)
-    if (response.status === 401) {
-      this.clearAuth();
-      // Redirect to login or trigger auth event
-      window.dispatchEvent(new Event("unauthorized"));
-      throw new Error("Session expired. Please login again.");
-    }
-
-    // Handle 429 Too Many Requests
-    if (response.status === 429) {
-      throw new Error("Too many requests. Please try again later.");
-    }
-
     if (!response.ok) {
       const error = await response.json().catch(() => ({
-        error: "An error occurred",
+        message: "An error occurred",
       }));
       throw new Error(
-        error.error || error.message || `HTTP error! status: ${response.status}`
+        error.message || `HTTP error! status: ${response.status}`
       );
     }
-
     return response.json();
   }
 
@@ -113,17 +58,7 @@ class ApiService {
   }
 
   async logout() {
-    try {
-      // Optional: Call backend logout endpoint if needed
-      await fetch(`${API_URL}/auth/logout`, {
-        method: "POST",
-        headers: this.getHeaders(),
-      });
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      this.clearAuth();
-    }
+    this.setToken(null);
     return Promise.resolve();
   }
 

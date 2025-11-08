@@ -16,22 +16,20 @@ const Modal = ({ isOpen, onClose, title, children }) => {
       onClick={onClose}
     >
       <div
-        className="bg-gray-900 rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-gray-800 relative"
+        className="bg-gray-900 rounded-lg shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-gray-800 relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="sticky top-4 float-right p-1.5 rounded-md text-gray-400 hover:text-gray-200 hover:bg-gray-800/50 transition-all duration-200 z-50 mr-4"
+          className="absolute top-4 right-4 p-1.5 rounded-md text-gray-400 hover:text-gray-200 hover:bg-gray-800/50 transition-all duration-200 z-50"
           title="Close"
         >
           <X className="w-5 h-5" />
         </button>
-        <div className="sticky top-0 bg-gray-900 p-4 sm:p-6 border-b border-gray-800 z-10">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-100 pr-10">
-            {title}
-          </h2>
+        <div className="sticky top-0 bg-gray-900 p-6 border-b border-gray-800 z-10 pr-12">
+          <h2 className="text-2xl font-bold text-gray-100">{title}</h2>
         </div>
-        <div className="p-4 sm:p-6">{children}</div>
+        <div className="p-6">{children}</div>
       </div>
     </div>
   );
@@ -510,13 +508,12 @@ export default function ImprovedOrderForm({
         </div>
 
         {/* Form Actions */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-4 border-t border-gray-800">
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-800">
           <Button
             type="button"
             variant="secondary"
             onClick={onClose}
             disabled={isLoading}
-            className="w-full sm:w-auto order-2 sm:order-1"
           >
             Cancel
           </Button>
@@ -524,7 +521,7 @@ export default function ImprovedOrderForm({
             type="submit"
             variant="primary"
             disabled={isLoading}
-            className="min-w-[140px] w-full sm:w-auto order-1 sm:order-2"
+            className="min-w-[140px]"
           >
             {isLoading ? (
               <>

@@ -13,7 +13,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
-import OrderForm from "./OrderForm";
+import ImprovedOrderForm from "./ImprovedOrderForm";
 import CustomDropdown from "./CustomDropdown";
 
 // Import common components
@@ -250,14 +250,14 @@ function Orders() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6 animate-in fade-in slide-in-from-top-2 duration-300">
+      <div className="flex justify-between items-center mb-6 animate-in fade-in slide-in-from-top-2 duration-300">
         <div className="text-sm text-gray-400">
           Showing {filteredOrders.length}{" "}
           {filteredOrders.length === 1 ? "order" : "orders"}
         </div>
         <button
           onClick={() => setModal({ isOpen: true, mode: "create", data: null })}
-          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-gray-100 rounded-lg hover:bg-white transition-all duration-200 shadow-sm hover:shadow hover:scale-105"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-gray-100 rounded-lg hover:bg-white transition-all duration-200 shadow-sm hover:shadow hover:scale-105"
         >
           <Plus className="w-4 h-4" />
           New Order
@@ -274,7 +274,7 @@ function Orders() {
       {/* Filters */}
       {!loading || customers.length > 0 ? (
         <>
-          <div className="bg-gray-900 border border-gray-800 shadow-sm rounded-lg p-4 sm:p-5 transition-all duration-200 animate-in fade-in slide-in-from-top-3 duration-400">
+          <div className="bg-gray-900 border border-gray-800 shadow-sm rounded-lg p-5 transition-all duration-200 animate-in fade-in slide-in-from-top-3 duration-400">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="relative">
                 <Input
@@ -309,7 +309,7 @@ function Orders() {
             </div>
 
             {showCustomRange && (
-              <div className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4 border-t border-gray-800 animate-in fade-in duration-200">
+              <div className="mt-4 flex items-center gap-3 pt-4 border-t border-gray-800 animate-in fade-in duration-200">
                 <label className="text-sm text-gray-400 whitespace-nowrap">
                   Date Range:
                 </label>
@@ -322,11 +322,9 @@ function Orders() {
                       start: e.target.value,
                     })
                   }
-                  className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert transition-all w-full sm:flex-1"
+                  className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert transition-all"
                 />
-                <span className="text-gray-400 text-sm text-center sm:text-left">
-                  to
-                </span>
+                <span className="text-gray-400 text-sm">to</span>
                 <input
                   type="date"
                   value={customRange.end}
@@ -336,7 +334,7 @@ function Orders() {
                       end: e.target.value,
                     })
                   }
-                  className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert transition-all w-full sm:flex-1"
+                  className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert transition-all"
                 />
                 {customRange.start && customRange.end && (
                   <button
@@ -345,7 +343,7 @@ function Orders() {
                       setDateFilter("All");
                       setShowCustomRange(false);
                     }}
-                    className="px-3 py-1.5 text-sm text-gray-400 hover:text-gray-100 transition-colors w-full sm:w-auto"
+                    className="px-3 py-1.5 text-sm text-gray-400 hover:text-gray-100 transition-colors"
                   >
                     Clear
                   </button>
@@ -356,8 +354,7 @@ function Orders() {
 
           {/* Orders Table */}
           <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {/* Desktop Table View */}
-            <div className="hidden lg:block overflow-x-auto">
+            <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-800 border-b border-gray-700">
                   <tr>
@@ -660,135 +657,12 @@ function Orders() {
                 </div>
               )}
             </div>
-
-            {/* Mobile Card View */}
-            <div className="lg:hidden divide-y divide-gray-800">
-              {filteredOrders.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
-                  <Package className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                  <p className="text-lg font-medium">No orders found</p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Try adjusting your filters
-                  </p>
-                </div>
-              ) : (
-                filteredOrders.map((order, index) => (
-                  <div
-                    key={order._id}
-                    style={{
-                      animationDelay: `${index * 30}ms`,
-                    }}
-                    className="p-4 hover:bg-gray-800/30 transition-all duration-150 animate-in fade-in slide-in-from-bottom-2 duration-300"
-                  >
-                    {/* Card Header */}
-                    <div className="flex justify-between items-start mb-3">
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-base font-semibold text-gray-100 truncate">
-                          {order.customerName}
-                        </h3>
-                        <p className="text-sm text-gray-400 mt-1">
-                          {order.mobileNo}
-                        </p>
-                      </div>
-                      <span
-                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ml-2 flex-shrink-0 ${
-                          order.deliveryStatus === "Delivered"
-                            ? "bg-green-900/30 text-green-400 border border-green-800"
-                            : "bg-amber-900/30 text-amber-400 border border-amber-800"
-                        }`}
-                      >
-                        {order.deliveryStatus}
-                      </span>
-                    </div>
-
-                    {/* Card Details */}
-                    <div className="space-y-2 mb-3 pb-3 border-b border-gray-800">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Item:</span>
-                        <span className="text-gray-100 font-medium">
-                          {order.item} ×{order.quantity}
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Total:</span>
-                        <span className="text-gray-100 font-semibold">
-                          ₹{order.totalAmount.toLocaleString("en-IN")}
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Advance:</span>
-                        <span className="text-green-400 font-medium">
-                          ₹{order.advanceAmount.toLocaleString("en-IN")}
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Balance:</span>
-                        <span className="text-amber-400 font-bold">
-                          ₹{order.remainingBalance.toLocaleString("en-IN")}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Dates */}
-                    <div className="grid grid-cols-2 gap-3 mb-3 text-sm">
-                      <div>
-                        <p className="text-gray-500 text-xs mb-1">Order Date</p>
-                        <p className="text-gray-300">
-                          {new Date(order.orderDate).toLocaleDateString()}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500 text-xs mb-1">
-                          Delivery Date
-                        </p>
-                        <p className="text-gray-300">
-                          {new Date(order.deliveryDate).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Address */}
-                    <div className="mb-3">
-                      <p className="text-gray-500 text-xs mb-1">Address</p>
-                      <p className="text-gray-300 text-sm line-clamp-2">
-                        {order.address}
-                      </p>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() =>
-                          setModal({
-                            isOpen: true,
-                            mode: "edit",
-                            data: order,
-                          })
-                        }
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-100 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-all"
-                      >
-                        <Edit className="w-4 h-4" />
-                        Edit
-                      </button>
-                      <button
-                        onClick={() =>
-                          setDeleteModal({ isOpen: true, id: order._id })
-                        }
-                        className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-red-400 bg-red-900/20 border border-red-800 rounded-lg hover:bg-red-900/30 transition-all"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
           </div>
         </>
       ) : null}
 
       {/* Order Form Modal */}
-      <OrderForm
+      <ImprovedOrderForm
         isOpen={modal.isOpen}
         mode={modal.mode}
         data={modal.data}

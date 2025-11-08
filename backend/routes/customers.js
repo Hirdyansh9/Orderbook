@@ -1,5 +1,7 @@
 import express from "express";
 import Customer from "../models/Customer.js";
+import Notification from "../models/Notification.js";
+import User from "../models/User.js";
 import { auth, ownerOnly } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -56,6 +58,26 @@ router.post("/", auth, async (req, res) => {
       createdBy: req.userId,
     });
     await customer.save();
+
+    // Create notification for all active users
+    try {
+      const allUsers = await User.find({ isActive: true });
+      const creator = await User.findById(req.userId);
+      
+      for (const user of allUsers) {
+        await Notification.create({
+          userId: user._id,
+          type: "success",
+          title: "New Order Created",
+          message: `${creator?.name || "A user"} created a new order for ${customer.customerName} - ${customer.item} (Qty: ${customer.quantity}, Amount: ₹${customer.totalAmount})`,
+          read: false,
+        });
+      }
+    } catch (notifError) {
+      console.error("Error creating notifications:", notifError);
+      // Don't fail the request if notification creation fails
+    }
+
     res.status(201).json(customer);
   } catch (error) {
     console.error("Error creating order:", error);
@@ -108,10 +130,39 @@ router.delete("/:id", auth, async (req, res) => {
       userId: req.userId,
     });
 
-    const customer = await Customer.findByIdAndDelete(req.params.id);
+    const customer = await Customer.findById(req.params.id);
 
     if (!customer) {
       return res.status(404).json({ error: "Customer not found" });
+    }
+
+    // Store customer info before deletion for notification
+    const customerInfo = {
+      name: customer.customerName,
+      item: customer.item,
+      quantity: customer.quantity,
+      amount: customer.totalAmount,
+    };
+
+    await Customer.findByIdAndDelete(req.params.id);
+
+    // Create notification for all active users
+    try {
+      const allUsers = await User.find({ isActive: true });
+      const deleter = await User.findById(req.userId);
+      
+      for (const user of allUsers) {
+        await Notification.create({
+          userId: user._id,
+          type: "warning",
+          title: "Order Deleted",
+          message: `${deleter?.name || "A user"} deleted order for ${customerInfo.name} - ${customerInfo.item} (Qty: ${customerInfo.quantity}, Amount: ₹${customerInfo.amount})`,
+          read: false,
+        });
+      }
+    } catch (notifError) {
+      console.error("Error creating notifications:", notifError);
+      // Don't fail the request if notification creation fails
     }
 
     res.json({ message: "Customer order deleted successfully" });

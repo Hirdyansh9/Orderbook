@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./index.css";
 import { AppProvider, useApp } from "./context/AppContext.jsx";
 import LoginScreen from "./components/LoginScreen";
-import { Orders } from "./components/OrdersPage";
+import { Orders } from "./components/Orders";
 import EmployeeManagement from "./components/EmployeeManagement";
 import NotificationsPage from "./components/pages/NotificationsPage";
 import NotificationSettings from "./components/NotificationSettings";
@@ -283,19 +283,15 @@ function Dashboard() {
   }
 
   const StatCard = ({ title, value, icon, colorClass }) => (
-    <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 sm:p-6 flex items-center gap-3 sm:gap-4 hover:border-gray-700 hover:shadow-lg transition-all duration-200 group animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 flex items-center gap-4 hover:border-gray-700 hover:shadow-lg transition-all duration-200 group animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div
-        className={`p-2 sm:p-3 rounded-lg ${colorClass} group-hover:scale-110 transition-transform duration-200`}
+        className={`p-3 rounded-lg ${colorClass} group-hover:scale-110 transition-transform duration-200`}
       >
         {icon}
       </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-xs sm:text-sm font-medium text-gray-400 mb-1 truncate">
-          {title}
-        </p>
-        <p className="text-2xl sm:text-3xl font-bold text-gray-100 tabular-nums">
-          {value}
-        </p>
+      <div>
+        <p className="text-sm font-medium text-gray-400 mb-1">{title}</p>
+        <p className="text-3xl font-bold text-gray-100 tabular-nums">{value}</p>
       </div>
     </div>
   );
@@ -321,7 +317,7 @@ function Dashboard() {
       {/* Recent Orders */}
       <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
         <div
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 p-4 sm:p-6 sm:pb-4 cursor-pointer hover:bg-gray-800/50 transition-colors"
+          className="flex justify-between items-center p-6 pb-4 cursor-pointer hover:bg-gray-800/50 transition-colors"
           onClick={() => setRecentMinimized(!recentMinimized)}
         >
           <div className="flex items-center gap-3">
@@ -336,13 +332,11 @@ function Dashboard() {
           </div>
           {!recentMinimized && (
             <div
-              className="flex items-center gap-3 w-full sm:w-auto"
+              className="flex items-center gap-3"
               onClick={(e) => e.stopPropagation()}
             >
-              <label className="text-sm text-gray-400 whitespace-nowrap">
-                Show last:
-              </label>
-              <div className="w-full sm:w-40">
+              <label className="text-sm text-gray-400">Show last:</label>
+              <div className="w-40">
                 <CustomDropdown
                   value={recentDays}
                   onChange={(val) => {
@@ -366,7 +360,7 @@ function Dashboard() {
           }`}
         >
           {showRecentCustom && (
-            <div className="px-4 sm:px-6 pb-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 border-t border-gray-800 pt-4">
+            <div className="px-6 pb-4 flex items-center gap-3 border-t border-gray-800 pt-4">
               <input
                 type="date"
                 value={recentCustomRange.start}
@@ -376,11 +370,9 @@ function Dashboard() {
                     start: e.target.value,
                   })
                 }
-                className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert w-full sm:w-auto"
+                className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert"
               />
-              <span className="text-gray-400 text-sm text-center sm:text-left">
-                to
-              </span>
+              <span className="text-gray-400 text-sm">to</span>
               <input
                 type="date"
                 value={recentCustomRange.end}
@@ -390,7 +382,7 @@ function Dashboard() {
                     end: e.target.value,
                   })
                 }
-                className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert w-full sm:w-auto"
+                className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert"
               />
               <button
                 onClick={() => {
@@ -404,7 +396,7 @@ function Dashboard() {
                     setRecentDays(diffDays);
                   }
                 }}
-                className="px-3 py-1.5 text-sm bg-gray-100 text-gray-900 rounded-lg hover:bg-white transition-colors w-full sm:w-auto"
+                className="px-3 py-1.5 text-sm bg-gray-100 text-gray-900 rounded-lg hover:bg-white transition-colors"
               >
                 Apply
               </button>
@@ -575,7 +567,7 @@ function Dashboard() {
       {/* Upcoming Deliveries */}
       <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
         <div
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 p-4 sm:p-6 sm:pb-4 cursor-pointer hover:bg-gray-800/50 transition-colors"
+          className="flex justify-between items-center p-6 pb-4 cursor-pointer hover:bg-gray-800/50 transition-colors"
           onClick={() => setUpcomingMinimized(!upcomingMinimized)}
         >
           <div className="flex items-center gap-3">
@@ -592,13 +584,11 @@ function Dashboard() {
           </div>
           {!upcomingMinimized && (
             <div
-              className="flex items-center gap-3 w-full sm:w-auto"
+              className="flex items-center gap-3"
               onClick={(e) => e.stopPropagation()}
             >
-              <label className="text-sm text-gray-400 whitespace-nowrap">
-                Show next:
-              </label>
-              <div className="w-full sm:w-40">
+              <label className="text-sm text-gray-400">Show next:</label>
+              <div className="w-40">
                 <CustomDropdown
                   value={upcomingDays}
                   onChange={(val) => {
@@ -624,7 +614,7 @@ function Dashboard() {
           }`}
         >
           {showUpcomingCustom && (
-            <div className="px-4 sm:px-6 pb-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 border-t border-gray-800 pt-4">
+            <div className="px-6 pb-4 flex items-center gap-3 border-t border-gray-800 pt-4">
               <input
                 type="date"
                 value={upcomingCustomRange.start}
@@ -634,11 +624,9 @@ function Dashboard() {
                     start: e.target.value,
                   })
                 }
-                className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert w-full sm:w-auto"
+                className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert"
               />
-              <span className="text-gray-400 text-sm text-center sm:text-left">
-                to
-              </span>
+              <span className="text-gray-400 text-sm">to</span>
               <input
                 type="date"
                 value={upcomingCustomRange.end}
@@ -648,7 +636,7 @@ function Dashboard() {
                     end: e.target.value,
                   })
                 }
-                className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert w-full sm:w-auto"
+                className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert"
               />
               <button
                 onClick={() => {
@@ -662,7 +650,7 @@ function Dashboard() {
                     setUpcomingDays(diffDays);
                   }
                 }}
-                className="px-3 py-1.5 text-sm bg-gray-100 text-gray-900 rounded-lg hover:bg-white transition-colors w-full sm:w-auto"
+                className="px-3 py-1.5 text-sm bg-gray-100 text-gray-900 rounded-lg hover:bg-white transition-colors"
               >
                 Apply
               </button>
@@ -990,48 +978,31 @@ function MainLayout() {
   );
 
   return (
-    <div className="flex h-screen bg-gray-950 relative overflow-hidden">
-      {/* Mobile Backdrop */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
-          onClick={toggleSidebar}
-        />
-      )}
-
+    <div className="flex h-screen bg-gray-950 relative">
       {/* Sidebar */}
       <div
-        className={`fixed lg:relative inset-y-0 left-0 z-50 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        } w-72 bg-gray-900 border-r border-gray-800 transition-transform duration-300 ease-in-out flex-shrink-0`}
+        className={`${
+          sidebarOpen ? "w-72" : "w-0"
+        } bg-gray-900 border-r border-gray-800 transition-all duration-300 ease-in-out overflow-hidden flex-shrink-0`}
       >
-        <div className="w-72 h-full flex flex-col">
-          <div className="px-6 py-4 border-b border-gray-800 h-[73px] flex items-center justify-between">
+        <div
+          className={`w-72 h-full flex flex-col ${
+            sidebarOpen ? "opacity-100" : "opacity-0"
+          } transition-opacity duration-300`}
+        >
+          <div className="px-6 py-4 border-b border-gray-800 h-[73px] flex items-center">
             <div className="flex items-center gap-3">
               <Logo className="w-8 h-8 text-gray-100" />
               <h1 className="text-xl font-semibold text-gray-100 tracking-wide">
                 Orderbook
               </h1>
             </div>
-            {/* Close button for mobile */}
-            <button
-              onClick={toggleSidebar}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-800 transition-colors"
-            >
-              <X className="w-5 h-5 text-gray-400" />
-            </button>
           </div>
           <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
             {filteredMenuItems.map((item, index) => (
               <button
                 key={item.id}
-                onClick={() => {
-                  setCurrentView(item.id);
-                  // Close sidebar on mobile after navigation
-                  if (window.innerWidth < 1024) {
-                    toggleSidebar();
-                  }
-                }}
+                onClick={() => setCurrentView(item.id)}
                 style={{
                   animationDelay: `${index * 50}ms`,
                 }}
@@ -1080,38 +1051,36 @@ function MainLayout() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <header className="bg-gray-900 border-b border-gray-800 h-[73px]">
-          <div className="flex items-center justify-between px-4 sm:px-6 py-4 h-full">
-            <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+          <div className="flex items-center justify-between px-6 py-4 h-full">
+            <div className="flex items-center gap-4">
               <button
                 onClick={toggleSidebar}
-                className="p-2 rounded-lg hover:bg-gray-800 transition-colors flex-shrink-0"
+                className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
                 title={sidebarOpen ? "Close sidebar" : "Open sidebar"}
               >
                 <Menu className="w-5 h-5 text-gray-400" />
               </button>
-              <h2 className="text-base sm:text-lg font-medium text-gray-100 capitalize truncate">
+              <h2 className="text-lg font-medium text-gray-100 capitalize">
                 {currentView.replace("-", " ")}
               </h2>
             </div>
 
-            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            <div className="flex items-center gap-3">
               <NotificationsPanel />
               <button
                 onClick={logout}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-gray-100 transition-all duration-200 shadow-sm hover:shadow group"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-gray-100 transition-all duration-200 shadow-sm hover:shadow group"
                 title="Logout"
               >
                 <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
-                <span className="text-sm font-medium hidden sm:inline">
-                  Logout
-                </span>
+                <span className="text-sm font-medium">Logout</span>
               </button>
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto p-4 sm:p-6 bg-gray-950">
+        <main className="flex-1 overflow-auto p-6 bg-gray-950">
           {currentView === "dashboard" && <Dashboard />}
           {currentView === "orders" && <Orders />}
           {currentView === "notifications" && <NotificationsPage />}
