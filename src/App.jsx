@@ -286,23 +286,23 @@ const Dashboard = React.memo(function Dashboard() {
   }
 
   const StatCard = ({ title, value, icon, colorClass }) => (
-    <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 flex items-center gap-4 hover:border-gray-700 hover:shadow-lg transition-all duration-200 group animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 sm:p-6 flex items-center gap-3 sm:gap-4 hover:border-gray-700 hover:shadow-lg transition-all duration-200 group animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div
-        className={`p-3 rounded-lg ${colorClass} group-hover:scale-110 transition-transform duration-200`}
+        className={`p-2 sm:p-3 rounded-lg ${colorClass} group-hover:scale-110 transition-transform duration-200`}
       >
         {icon}
       </div>
       <div>
-        <p className="text-sm font-medium text-gray-400 mb-1">{title}</p>
-        <p className="text-3xl font-bold text-gray-100 tabular-nums">{value}</p>
+        <p className="text-xs sm:text-sm font-medium text-gray-400 mb-1">{title}</p>
+        <p className="text-2xl sm:text-3xl font-bold text-gray-100 tabular-nums">{value}</p>
       </div>
     </div>
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <StatCard
           title="Total Pending Payments"
           value={dashboardStats.pendingBalance?.count || 0}
@@ -320,10 +320,10 @@ const Dashboard = React.memo(function Dashboard() {
       {/* Recent Orders */}
       <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
         <div
-          className="flex justify-between items-center p-6 pb-4 cursor-pointer hover:bg-gray-800/50 transition-colors"
+          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 sm:pb-4 gap-3 cursor-pointer hover:bg-gray-800/50 transition-colors"
           onClick={() => setRecentMinimized(!recentMinimized)}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="p-1 transition-transform duration-300">
               {recentMinimized ? (
                 <ChevronDown className="w-5 h-5 text-gray-400" />
@@ -331,15 +331,15 @@ const Dashboard = React.memo(function Dashboard() {
                 <ChevronUp className="w-5 h-5 text-gray-400" />
               )}
             </div>
-            <h3 className="text-lg font-medium text-gray-100">Recent Orders</h3>
+            <h3 className="text-base sm:text-lg font-medium text-gray-100">Recent Orders</h3>
           </div>
           {!recentMinimized && (
             <div
-              className="flex items-center gap-3"
+              className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <label className="text-sm text-gray-400">Show last:</label>
-              <div className="w-40">
+              <label className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">Show last:</label>
+              <div className="w-full sm:w-40">
                 <CustomDropdown
                   value={recentDays}
                   onChange={(val) => {
@@ -363,7 +363,7 @@ const Dashboard = React.memo(function Dashboard() {
           }`}
         >
           {showRecentCustom && (
-            <div className="px-6 pb-4 flex items-center gap-3 border-t border-gray-800 pt-4">
+            <div className="px-4 sm:px-6 pb-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 border-t border-gray-800 pt-4">
               <input
                 type="date"
                 value={recentCustomRange.start}
@@ -375,7 +375,7 @@ const Dashboard = React.memo(function Dashboard() {
                 }
                 className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert"
               />
-              <span className="text-gray-400 text-sm">to</span>
+              <span className="text-gray-400 text-sm text-center sm:text-left">to</span>
               <input
                 type="date"
                 value={recentCustomRange.end}
@@ -406,21 +406,21 @@ const Dashboard = React.memo(function Dashboard() {
             </div>
           )}
 
-          <div className="px-6 pb-6 animate-in slide-in-from-top-4 fade-in duration-500">
+          <div className="px-4 sm:px-6 pb-4 sm:pb-6 animate-in slide-in-from-top-4 fade-in duration-500">
             {dashboardStats.ordersByDay &&
             dashboardStats.ordersByDay.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 {dashboardStats.ordersByDay.map((day, dayIndex) => (
                   <div
                     key={day._id}
                     style={{
                       animationDelay: `${dayIndex * 75}ms`,
                     }}
-                    className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 hover:border-gray-600 transition-all animate-in fade-in slide-in-from-bottom-2 duration-300"
+                    className="bg-gray-800/50 border border-gray-700 rounded-lg p-3 sm:p-4 hover:border-gray-600 transition-all animate-in fade-in slide-in-from-bottom-2 duration-300"
                   >
-                    <div className="flex justify-between items-start mb-4 pb-3 border-b border-gray-700">
+                    <div className="flex justify-between items-start mb-3 sm:mb-4 pb-2 sm:pb-3 border-b border-gray-700">
                       <div>
-                        <p className="font-semibold text-gray-100 text-base">
+                        <p className="font-semibold text-gray-100 text-sm sm:text-base">
                           {new Date(day._id).toLocaleDateString("en-US", {
                             weekday: "long",
                             month: "long",
@@ -428,7 +428,7 @@ const Dashboard = React.memo(function Dashboard() {
                             year: "numeric",
                           })}
                         </p>
-                        <p className="text-sm text-gray-400 mt-1">
+                        <p className="text-xs sm:text-sm text-gray-400 mt-1">
                           {day.count} order{day.count !== 1 ? "s" : ""} placed
                         </p>
                       </div>
@@ -436,27 +436,27 @@ const Dashboard = React.memo(function Dashboard() {
 
                     {/* Individual Orders */}
                     {day.orders && day.orders.length > 0 && (
-                      <div className="space-y-3">
+                      <div className="space-y-2 sm:space-y-3">
                         {day.orders.map((order, orderIndex) => (
                           <div
                             key={order._id}
                             style={{
                               animationDelay: `${orderIndex * 50}ms`,
                             }}
-                            className="bg-gray-900/50 border border-gray-700 rounded-lg p-3 hover:border-gray-600 transition-all duration-200 animate-in fade-in slide-in-from-left-2 duration-300"
+                            className="bg-gray-900/50 border border-gray-700 rounded-lg p-2.5 sm:p-3 hover:border-gray-600 transition-all duration-200 animate-in fade-in slide-in-from-left-2 duration-300"
                           >
-                            <div className="flex justify-between items-start mb-3">
-                              <div className="flex-1">
-                                <p className="font-semibold text-gray-100 text-base">
+                            <div className="flex justify-between items-start mb-2 sm:mb-3 gap-2">
+                              <div className="flex-1 min-w-0">
+                                <p className="font-semibold text-gray-100 text-sm sm:text-base truncate">
                                   {order.customerName}
                                 </p>
-                                <p className="text-sm text-gray-400 mt-1">
+                                <p className="text-xs sm:text-sm text-gray-400 mt-1">
                                   {order.item} (Qty: {order.quantity})
                                 </p>
                               </div>
-                              <div className="text-right">
+                              <div className="text-right flex-shrink-0">
                                 <span
-                                  className={`text-xs font-semibold px-2 py-1 rounded ${
+                                  className={`text-xs font-semibold px-1.5 sm:px-2 py-1 rounded whitespace-nowrap ${
                                     order.deliveryStatus === "Delivered"
                                       ? "bg-green-900/30 text-green-400"
                                       : "bg-amber-900/30 text-amber-400"
@@ -467,7 +467,7 @@ const Dashboard = React.memo(function Dashboard() {
                               </div>
                             </div>
 
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3 pb-3 border-b border-gray-700">
+                            <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-2 sm:mb-3 pb-2 sm:pb-3 border-b border-gray-700">
                               <div>
                                 <p className="text-xs text-gray-500 mb-1">
                                   Mobile
@@ -505,28 +505,28 @@ const Dashboard = React.memo(function Dashboard() {
                               </div>
                             </div>
 
-                            <div className="grid grid-cols-3 gap-4 mb-3 pb-3 border-b border-gray-700">
+                            <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-2 sm:mb-3 pb-2 sm:pb-3 border-b border-gray-700">
                               <div>
-                                <p className="text-xs text-gray-500 mb-1">
-                                  Total Amount
+                                <p className="text-xs text-gray-500 mb-0.5 sm:mb-1">
+                                  Total
                                 </p>
-                                <p className="text-sm font-semibold text-gray-100">
+                                <p className="text-xs sm:text-sm font-semibold text-gray-100">
                                   ₹{order.totalAmount.toLocaleString("en-IN")}
                                 </p>
                               </div>
                               <div>
-                                <p className="text-xs text-gray-500 mb-1">
-                                  Advance Paid
+                                <p className="text-xs text-gray-500 mb-0.5 sm:mb-1">
+                                  Advance
                                 </p>
-                                <p className="text-sm font-semibold text-green-400">
+                                <p className="text-xs sm:text-sm font-semibold text-green-400">
                                   ₹{order.advanceAmount.toLocaleString("en-IN")}
                                 </p>
                               </div>
                               <div>
-                                <p className="text-xs text-gray-500 mb-1">
-                                  Balance Due
+                                <p className="text-xs text-gray-500 mb-0.5 sm:mb-1">
+                                  Balance
                                 </p>
-                                <p className="text-sm font-semibold text-amber-400">
+                                <p className="text-xs sm:text-sm font-semibold text-amber-400">
                                   ₹
                                   {order.remainingBalance.toLocaleString(
                                     "en-IN"
@@ -570,10 +570,10 @@ const Dashboard = React.memo(function Dashboard() {
       {/* Upcoming Deliveries */}
       <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
         <div
-          className="flex justify-between items-center p-6 pb-4 cursor-pointer hover:bg-gray-800/50 transition-colors"
+          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 sm:pb-4 gap-3 cursor-pointer hover:bg-gray-800/50 transition-colors"
           onClick={() => setUpcomingMinimized(!upcomingMinimized)}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="p-1 transition-transform duration-300">
               {upcomingMinimized ? (
                 <ChevronDown className="w-5 h-5 text-gray-400" />
@@ -581,17 +581,17 @@ const Dashboard = React.memo(function Dashboard() {
                 <ChevronUp className="w-5 h-5 text-gray-400" />
               )}
             </div>
-            <h3 className="text-lg font-medium text-gray-100">
+            <h3 className="text-base sm:text-lg font-medium text-gray-100">
               Upcoming Deliveries
             </h3>
           </div>
           {!upcomingMinimized && (
             <div
-              className="flex items-center gap-3"
+              className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <label className="text-sm text-gray-400">Show next:</label>
-              <div className="w-40">
+              <label className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">Show next:</label>
+              <div className="w-full sm:w-40">
                 <CustomDropdown
                   value={upcomingDays}
                   onChange={(val) => {
@@ -617,7 +617,7 @@ const Dashboard = React.memo(function Dashboard() {
           }`}
         >
           {showUpcomingCustom && (
-            <div className="px-6 pb-4 flex items-center gap-3 border-t border-gray-800 pt-4">
+            <div className="px-4 sm:px-6 pb-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 border-t border-gray-800 pt-4">
               <input
                 type="date"
                 value={upcomingCustomRange.start}
@@ -629,7 +629,7 @@ const Dashboard = React.memo(function Dashboard() {
                 }
                 className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-gray-600 text-gray-100 [&::-webkit-calendar-picker-indicator]:invert"
               />
-              <span className="text-gray-400 text-sm">to</span>
+              <span className="text-gray-400 text-sm text-center sm:text-left">to</span>
               <input
                 type="date"
                 value={upcomingCustomRange.end}
@@ -660,10 +660,10 @@ const Dashboard = React.memo(function Dashboard() {
             </div>
           )}
 
-          <div className="px-6 pb-6 animate-in slide-in-from-top-4 fade-in duration-500">
+          <div className="px-4 sm:px-6 pb-4 sm:pb-6 animate-in slide-in-from-top-4 fade-in duration-500">
             {dashboardStats.upcomingDeliveries &&
             dashboardStats.upcomingDeliveries.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 {(() => {
                   // Group deliveries by date
                   const grouped = dashboardStats.upcomingDeliveries.reduce(
@@ -687,11 +687,11 @@ const Dashboard = React.memo(function Dashboard() {
                         style={{
                           animationDelay: `${dateIndex * 75}ms`,
                         }}
-                        className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 hover:border-gray-600 transition-all animate-in fade-in slide-in-from-bottom-2 duration-300"
+                        className="bg-gray-800/50 border border-gray-700 rounded-lg p-3 sm:p-4 hover:border-gray-600 transition-all animate-in fade-in slide-in-from-bottom-2 duration-300"
                       >
-                        <div className="flex justify-between items-start mb-4 pb-3 border-b border-gray-700">
+                        <div className="flex justify-between items-start mb-3 sm:mb-4 pb-2 sm:pb-3 border-b border-gray-700">
                           <div>
-                            <p className="font-semibold text-gray-100 text-base">
+                            <p className="font-semibold text-gray-100 text-sm sm:text-base">
                               {new Date(date).toLocaleDateString("en-US", {
                                 weekday: "long",
                                 month: "long",
@@ -699,7 +699,7 @@ const Dashboard = React.memo(function Dashboard() {
                                 year: "numeric",
                               })}
                             </p>
-                            <p className="text-sm text-gray-400 mt-1">
+                            <p className="text-xs sm:text-sm text-gray-400 mt-1">
                               {orders.length}{" "}
                               {orders.length !== 1 ? "deliveries" : "delivery"}{" "}
                               scheduled
@@ -708,7 +708,7 @@ const Dashboard = React.memo(function Dashboard() {
                         </div>
 
                         {/* Individual Orders */}
-                        <div className="space-y-3">
+                        <div className="space-y-2 sm:space-y-3">
                           {orders.map((order, orderIndex) => (
                             <div
                               key={order._id}
@@ -1094,7 +1094,9 @@ function MainLayout() {
                 title="Logout"
               >
                 <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
-                <span className="text-sm font-medium hidden sm:inline">Logout</span>
+                <span className="text-sm font-medium hidden sm:inline">
+                  Logout
+                </span>
               </button>
             </div>
           </div>
